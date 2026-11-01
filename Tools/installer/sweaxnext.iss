@@ -3,8 +3,8 @@
 ; Varsayılan kurulum yönetici istemez: VST3 kullanıcı klasörüne (%LOCALAPPDATA%\Programs\Common\VST3) gider.
 ; "Tüm kullanıcılar" seçilirse C:\Program Files\Common Files\VST3 kullanılır (yönetici ister).
 
-#ifndef Ver
-  #define Ver "1.0.0"
+#ifndef AppVer
+  #define AppVer "1.0.0"
 #endif
 #ifndef Src
   #define Src "..\..\build\SweaxNext_artefacts\Release\VST3"
@@ -13,8 +13,8 @@
 [Setup]
 AppId={{6E0B3D5A-58C1-4C1F-9C2E-5357A3E0B2A7}
 AppName=SweaxNext
-AppVersion={#Ver}
-AppVerName=SweaxNext {#Ver}
+AppVersion={#AppVer}
+AppVerName=SweaxNext {#AppVer}
 AppPublisher=Sweax Studios
 AppPublisherURL=https://github.com/Sweax3169/sweaxnext
 AppSupportURL=https://github.com/Sweax3169/sweaxnext/issues
@@ -27,9 +27,9 @@ DefaultDirName={autocf}\VST3
 DirExistsWarning=no
 DisableProgramGroupPage=yes
 UninstallFilesDir={autopf}\SweaxNext
-UninstallDisplayName=SweaxNext {#Ver} (VST3)
+UninstallDisplayName=SweaxNext {#AppVer} (VST3)
 LicenseFile=..\..\LICENSE
-OutputBaseFilename=SweaxNext-{#Ver}-Setup
+OutputBaseFilename=SweaxNext-{#AppVer}-Setup
 Compression=lzma2/ultra
 SolidCompression=yes
 WizardStyle=modern

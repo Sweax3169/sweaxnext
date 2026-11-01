@@ -57,7 +57,7 @@ jobs:
           Compress-Archive -Path pkg\* -DestinationPath "dist\SweaxNext-$ver-win64-vst3.zip"
           $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
           if (-not (Test-Path $iscc)) { choco install innosetup -y --no-progress; $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" }
-          & $iscc /Q "/DVer=$ver" "/DSrc=$PWD\build\SweaxNext_artefacts\Release\VST3" "/O$PWD\dist" Tools\installer\sweaxnext.iss
+          & $iscc /Q "/DAppVer=$ver" "/DSrc=$PWD\build\SweaxNext_artefacts\Release\VST3" "/O$PWD\dist" Tools\installer\sweaxnext.iss
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           Get-ChildItem dist -File | ForEach-Object { "{0}  {1}" -f (Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower(), $_.Name } |
             Set-Content dist\SHA256SUMS.txt
