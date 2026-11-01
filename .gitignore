@@ -1,0 +1,24 @@
+# SWEAX NEXT — derleme çıktıları ve yerel dosyalar
+/build*/
+/out/
+/dist/
+*.user
+*.suo
+.vs/
+.idea/
+.cache/
+*.log
+/Tests/Fixtures/_uretilen/
+
+# Ölçüm korpusu ve referans kayıtlar telifli: ASLA depoya girmez
+korpus/
+referans/
+
+# geliştirme notları (yerel)
+notlar/
+
+# ham çekimler ve ara ses dosyaları (yayınlanan örnekler docs/audio altında)
+*.mkv
+/Tools/demo/out/
+
+__pycache__/

@@ -1,0 +1,56 @@
+{
+ "gecikme": [
+  {
+   "mod": "Canli",
+   "sr": 44100,
+   "ms": 41.3
+  },
+  {
+   "mod": "Canli",
+   "sr": 48000,
+   "ms": 39.4
+  },
+  {
+   "mod": "Canli",
+   "sr": 96000,
+   "ms": 39.1
+  },
+  {
+   "mod": "Yuksek",
+   "sr": 44100,
+   "ms": 237.8
+  },
+  {
+   "mod": "Yuksek",
+   "sr": 48000,
+   "ms": 234.0
+  },
+  {
+   "mod": "Yuksek",
+   "sr": 96000,
+   "ms": 233.6
+  },
+  {
+   "mod": "Ultra",
+   "sr": 44100,
+   "ms": 237.8
+  },
+  {
+   "mod": "Ultra",
+   "sr": 48000,
+   "ms": 234.0
+  },
+  {
+   "mod": "Ultra",
+   "sr": 96000,
+   "ms": 233.6
+  }
+ ],
+ "gecikme48": {
+  "canli": 39.4,
+  "yuksek": 234.0,
+  "ultra": 234.0
+ },
+ "cpuYuzde": "8–15%",
+ "kaynak": "gecikme: SweaxShots --bilgi; işlemci: zincir_rt_butcesi testi, altı ölçüm (8.3, 12.0, 13.4, 14.6, 14.8; 25.8 makine meşgulken atıldı), AMD Ryzen 5 7600"
+}

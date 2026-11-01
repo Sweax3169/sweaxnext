@@ -1,0 +1,77 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure (fetches JUCE 7.0.12)
+        run: cmake -G "Visual Studio 17 2022" -A x64 -B build
+
+      - name: Build plug-in, tests and render tool
+        run: cmake --build build --config Release --target SweaxNext_VST3 SweaxTests SweaxRender -- -m
+
+      - name: Tests
+        run: build\SweaxTests_artefacts\Release\SweaxTests.exe
+
+      # GitHub's runners have no interactive desktop, so the editor tests are skipped here;
+      # the full strictness-10 run including the editor is done on a desktop before each release.
+      - name: pluginval (strictness 10)
+        shell: pwsh
+        run: |
+          Invoke-WebRequest https://github.com/Tracktion/pluginval/releases/download/v1.0.4/pluginval_Windows.zip -OutFile pluginval.zip
+          Expand-Archive pluginval.zip -DestinationPath pluginval
+          .\pluginval\pluginval.exe --strictness-level 10 --skip-gui-tests --validate-in-process --validate "build\SweaxNext_artefacts\Release\VST3\SWEAX NEXT.vst3"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Package (zip + installer + checksums)
+        shell: pwsh
+        run: |
+          $ver = (Select-String -Path CMakeLists.txt -Pattern 'project\(SweaxNext VERSION ([0-9.]+)').Matches[0].Groups[1].Value
+          New-Item -ItemType Directory dist, pkg -Force | Out-Null
+          Copy-Item -Recurse "build\SweaxNext_artefacts\Release\VST3\SWEAX NEXT.vst3" "pkg\SWEAX NEXT.vst3"
+          Copy-Item LICENSE pkg\LICENSE.txt
+          Copy-Item THIRD_PARTY_NOTICES.md pkg\THIRD_PARTY_NOTICES.md
+          @(
+            "SweaxNext $ver - vocal mix plug-in (VST3, Windows 64-bit)",
+            "",
+            "Copy the 'SWEAX NEXT.vst3' folder into one of these folders, then rescan plug-ins in your DAW:",
+            "  %LOCALAPPDATA%\Programs\Common\VST3        (just you, no admin rights)",
+            "  C:\Program Files\Common Files\VST3          (all users)",
+            "",
+            "Studio One: Options > Locations > VST Plug-Ins lists the folders it scans.",
+            "",
+            "Source, help and the installer: https://github.com/Sweax3169/sweaxnext"
+          ) | Set-Content pkg\README.txt
+          Compress-Archive -Path pkg\* -DestinationPath "dist\SweaxNext-$ver-win64-vst3.zip"
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) { choco install innosetup -y --no-progress; $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" }
+          & $iscc /Q "/DVer=$ver" "/DSrc=$PWD\build\SweaxNext_artefacts\Release\VST3" "/O$PWD\dist" Tools\installer\sweaxnext.iss
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          Get-ChildItem dist -File | ForEach-Object { "{0}  {1}" -f (Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower(), $_.Name } |
+            Set-Content dist\SHA256SUMS.txt
+          Get-ChildItem dist | Format-Table Name, Length
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SweaxNext-${{ github.sha }}
+          path: dist/*
+
+      - name: Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          name: SweaxNext ${{ github.ref_name }}
+          body_path: docs/release-notes/${{ github.ref_name }}.md
+          files: dist/*
