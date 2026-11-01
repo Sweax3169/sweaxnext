@@ -30,7 +30,7 @@
   --shadow:0 30px 70px -34px rgba(60,40,10,.35);color-scheme:light;
 }}
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%;overflow-x:clip}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 "Hanken",system-ui,sans-serif;overflow-x:hidden}
 img,video,canvas{display:block;max-width:100%}
 a{color:var(--teal);text-decoration-thickness:1px;text-underline-offset:3px}
@@ -63,7 +63,7 @@ button{font:inherit;color:inherit}
 
 /* hero */
 .hero{position:relative;padding:72px 0 40px}
-.hero::before{content:"";position:absolute;inset:-120px -10% auto;height:640px;background:radial-gradient(40% 50% at 18% 30%,color-mix(in srgb,var(--gold) 14%,transparent),transparent 70%),radial-gradient(45% 55% at 85% 55%,color-mix(in srgb,var(--teal) 16%,transparent),transparent 70%);pointer-events:none;z-index:-1}
+.hero::before{content:"";position:absolute;inset:-120px 0 auto;height:640px;background:radial-gradient(40% 50% at 18% 30%,color-mix(in srgb,var(--gold) 14%,transparent),transparent 70%),radial-gradient(45% 55% at 85% 55%,color-mix(in srgb,var(--teal) 16%,transparent),transparent 70%);pointer-events:none;z-index:-1}
 .hero .wrap{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:48px;align-items:center}
 .kicker{color:var(--ink2);font-weight:600;font-size:15px;margin-bottom:14px}
 .hero h1{font-size:clamp(60px,8.4vw,112px);letter-spacing:-.035em;line-height:.98;padding-top:.06em}
